@@ -55,6 +55,71 @@ app.listen(port, () => {
 });
 
 
+app.get("/", (req, res) => {
+    const sql = "SELECT * FROM add_newspaper";
+    db.query(sql, (err, data) => {
+        if (err) {
+            console.error('Error fetching data: ', err);
+            return res.status(500).json({ error: "Failed to fetch data" });
+        }
+        return res.json(data);
+    });
+});
+
+app.post('/create', (req, res) => {
+    const sql = "INSERT INTO add_newspaper (`publisher`, `newspaper_name`) VALUES (?, ?)";
+    const values = [
+       
+        req.body.publisher,
+        req.body.newspaper_name
+
+    ];
+
+    db.query(sql, values, (err, data) => {
+        if (err) {
+            console.error('Error inserting data: ', err);
+            return res.status(500).json({ error: "Failed to insert data" });
+        }
+        return res.json({ message: "Data inserted successfully", data });
+    });
+});
+
+
+app.put('/update/:id', (req, res) => {
+    const sql = "UPDATE add_newspaper SET `publisher`=?,`newspaper_name`=? WHERE id=? ";
+    const values = [
+        req.body.book_type_name,
+        req.body.prefix
+   
+    ];
+
+    const id=req.params.id;
+
+    db.query(sql, [...values ,id], (err, data) => {
+        if (err) {
+            console.error('Error inserting data: ', err);
+            return res.status(500).json({ error: "Failed to insert data" });
+        }
+        return res.json({ message: "Data inserted successfully", data });
+    });
+});
+
+
+
+app.delete('/usercrud/:id', (req, res) => {
+    const sql = "DELETE FROM add_newspaper WHERE ID = ? ";
+    const id=req.params.id;
+
+    db.query(sql, [id], (err, data) => {
+        if (err) {
+            console.error('Error inserting data: ', err);
+            return res.status(500).json({ error: "Failed to insert data" });
+        }
+        return res.json({ message: "Data inserted successfully", data });
+    });
+});
+
+
 
 
 
